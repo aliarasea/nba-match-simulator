@@ -4,5 +4,6 @@
 
 
 ## Instructions
-- localhost:7676/api/getTeams ==> gets all teams as json object
-- localhost:7676/api/getPlayers ==> gets all player as json object
+- The program use balldontlie.com to get the data for the teams and players
+- localhost:7676/api/teams ==> gets all teams as json object
+- localhost:7676/api/players ==> gets all player as json object

@@ -11,9 +11,9 @@ import (
 
 func getPlayersData(page int) model.PlayersData {
 	if page <= 0 {
-		fmt.Print("Page is empty")
-		os.Exit(1)
+		page = 1
 	}
+
 	response, err := http.Get(fmt.Sprintf("https://www.balldontlie.io/api/v1/players?page=%d", page))
 	if err != nil {
 		fmt.Print(err.Error())
