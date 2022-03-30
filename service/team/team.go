@@ -6,9 +6,12 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"nway2inside/helper"
 	"nway2inside/model"
 	"os"
 )
+
+type Teams []model.Team
 
 func GetTeamsData(page int) model.TeamsData {
 	if page <= 0 {
@@ -30,7 +33,7 @@ func GetTeamsData(page int) model.TeamsData {
 	return teamsData
 }
 
-func GetAllTeams() []model.Team {
+func GetAllTeams() Teams {
 	var teamsData model.TeamsData
 
 	teamsData = GetTeamsData(1)
@@ -54,4 +57,8 @@ func GetTeams(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func (teams Teams) Shuffle() Teams {
+	return helper.Shuffle(teams)
 }

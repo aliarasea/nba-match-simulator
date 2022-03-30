@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"nway2inside/service/fixture"
 	"nway2inside/service/player"
 	"nway2inside/service/team"
 )
@@ -33,6 +34,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/api", api).Methods("POST")
 	myRouter.HandleFunc("/api/teams", team.GetTeams).Methods("GET")
 	myRouter.HandleFunc("/api/players", player.GetPlayers).Methods("GET")
+	myRouter.HandleFunc("/api/fixture", fixture.GetFixture).Methods("GET")
 	log.Fatal(http.ListenAndServe(":7676", myRouter))
 }
 

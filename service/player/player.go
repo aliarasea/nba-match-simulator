@@ -5,9 +5,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"nway2inside/helper"
 	"nway2inside/model"
+	"nway2inside/service/team"
 	"os"
 )
+
+type Players []model.Player
 
 func getPlayersData(page int) model.PlayersData {
 	if page <= 0 {
@@ -29,14 +33,16 @@ func getPlayersData(page int) model.PlayersData {
 	return playersData
 }
 
-func GetAllPlayers() []model.Player {
+func GetAllPlayers() Players {
 	var playersData model.PlayersData
 
 	playersData = getPlayersData(1)
 
 	totalPages := playersData.Meta.TotalPages
 
-	players := playersData.Player
+	var players Players
+
+	players = playersData.Player
 
 	for i := 2; i <= totalPages; i++ {
 		playersData = getPlayersData(i)
@@ -44,7 +50,7 @@ func GetAllPlayers() []model.Player {
 			players = append(players, playersData.Player...)
 		}
 	}
-	return players
+	return players.Shuffle().AssignToTeams()
 }
 
 func GetPlayers(w http.ResponseWriter, r *http.Request) {
@@ -54,4 +60,19 @@ func GetPlayers(w http.ResponseWriter, r *http.Request) {
 		fmt.Print(err.Error())
 		os.Exit(1)
 	}
+}
+
+func (players Players) Shuffle() Players {
+	return helper.Shuffle(players)
+}
+
+func (players Players) AssignToTeams() Players {
+	teams := team.GetAllTeams()
+	for _, teamItem := range teams {
+		teams.Shuffle()
+		for _, player := range players {
+			player.Team = teamItem
+		}
+	}
+	return players
 }
